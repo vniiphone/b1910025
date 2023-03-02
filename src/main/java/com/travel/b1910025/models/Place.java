@@ -50,7 +50,7 @@ public class Place {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) {3
         this.name = name;
     }
 

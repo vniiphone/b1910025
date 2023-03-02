@@ -186,7 +186,7 @@ public class Tour {
 		this.restau = restau;
 	}
 
-	public Tour(Long id, @NotBlank(message = "Name is required") String name, @NotNull @Min(0) @Max(500) int slot,
+	public Tour(@NotBlank(message = "Name is required") String name, @NotNull @Min(0) @Max(500) int slot,
 			@NotNull @Min(0) int price, @NotNull Date beginTrip, @NotNull Date endTrip,
 			@NotBlank(message = "Description is required") String description,
 			@NotBlank(message = "Image is required") String imageUrl,
@@ -208,6 +208,5 @@ public class Tour {
 		this.hotel = hotel;
 		this.restau = restau;
 	}
-	
-	
+
 }
