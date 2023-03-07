@@ -49,10 +49,15 @@ public class TourServiceImpl implements TourService {
         Hotel hotel = hotelRepo.findById(tourRequest.getFirm_id()).orElseThrow();
         Restau restau = restauRepo.findById(tourRequest.getFirm_id()).orElseThrow();
         Place place = placeRepo.findById(tourRequest.getFirm_id()).orElseThrow();
-        Tour tour = new Tour(tourRequest.getName(), tourRequest.getDescription(),
-                tourRequest.getSlot(), tourRequest.getPrice(), tourRequest.getBeginTrip().toString(),
-                tourRequest.getEndTrip().toString(),
-                tourRequest.getImageUrl(), tourRequest.getImagePublicId(), category, firm, hotel, restau, place);
+        Tour tour = new Tour(tourRequest.getName(), 
+                tourRequest.getSlot(), 
+                tourRequest.getPrice(),
+                tourRequest.getBeginTrip(),
+                tourRequest.getEndTrip(),
+                tourRequest.getDescription(),
+                tourRequest.getImageUrl(), 
+                tourRequest.getImagePublicId(),
+                category, firm,place, hotel, restau );
         // Thiếu thuộc tính của Tour khi thêm
 
         return tourRepo.save(tour);

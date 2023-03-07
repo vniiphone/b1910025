@@ -53,7 +53,7 @@ public class TourRequest {
 	
 
 	public TourRequest() {
-		super();
+		
 		// TODO Auto-generated constructor stub
 	}
 

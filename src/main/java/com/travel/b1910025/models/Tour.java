@@ -186,6 +186,7 @@ public class Tour {
 		this.restau = restau;
 	}
 
+
 	public Tour(@NotBlank(message = "Name is required") String name, @NotNull @Min(0) @Max(500) int slot,
 			@NotNull @Min(0) int price, @NotNull Date beginTrip, @NotNull Date endTrip,
 			@NotBlank(message = "Description is required") String description,
@@ -193,7 +194,6 @@ public class Tour {
 			@NotBlank(message = "Image is required") String imagePublicId, Category category, Firm firm, Place place,
 			Hotel hotel, Restau restau) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.slot = slot;
 		this.price = price;
@@ -207,6 +207,9 @@ public class Tour {
 		this.place = place;
 		this.hotel = hotel;
 		this.restau = restau;
+	}
+	public Tour() {
+		
 	}
 
 }

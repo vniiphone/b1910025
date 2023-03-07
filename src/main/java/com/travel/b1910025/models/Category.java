@@ -51,11 +51,11 @@ public class Category {
 		this.tours = tours;
 	}
 
-	public Category(Long id, @NotBlank(message = "Name is required") String name, List<Tour> tours) {
+	public Category(@NotBlank(message = "Name is required") String name, List<Tour> tours) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.tours = tours;
 	}
 
+	public Category() {}
 }
