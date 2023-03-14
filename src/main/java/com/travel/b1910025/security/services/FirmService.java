@@ -22,10 +22,5 @@ public interface FirmService {
     Firm getASingleFirm(Long firmdId);
 
     List<Firm> getAllFirms();
-
-    
-    
-
    
-    
 }

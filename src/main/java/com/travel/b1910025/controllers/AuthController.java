@@ -30,7 +30,7 @@ import com.travel.b1910025.security.jwt.JwtUtils;
 import com.travel.b1910025.security.services.UserDetailsImpl;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:5173", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:3001"," http://localhost:3000"})
 @RequestMapping("/api/auth")
 public class AuthController {
   @Autowired

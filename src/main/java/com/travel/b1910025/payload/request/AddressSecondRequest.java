@@ -12,7 +12,7 @@ public class AddressSecondRequest {
 
 	@NotBlank
 	private String phone;
-
+	
 	public Long getWard_id() {
 		return ward_id;
 	}

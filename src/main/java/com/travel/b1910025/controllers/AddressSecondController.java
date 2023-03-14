@@ -45,8 +45,8 @@ import com.travel.b1910025.repository.RestauRepository;
 import com.travel.b1910025.repository.UserRepository;
 import com.travel.b1910025.repository.WardRepository;
 
-@CrossOrigin(origins = "http://127.0.0.1:5173", maxAge = 3600)
 @RestController
+@CrossOrigin(origins = {"http://localhost:3001"," http://localhost:3000"})
 @RequestMapping("/api/addressSecond")
 public class AddressSecondController {
     @Autowired
@@ -64,6 +64,7 @@ public class AddressSecondController {
             List<City> cities = cityRepo.findAll();
             return new ResponseEntity<>(cities, HttpStatus.OK);
         } catch (Exception e) {
+        	System.out.println(e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -79,6 +80,16 @@ public class AddressSecondController {
 
             return new ResponseEntity<>(districts, HttpStatus.OK);
         } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/districtsByCity")
+    public ResponseEntity<List<District>> getDistrictsByCity(@RequestParam Long city_id) {
+        try {
+            List<District> districts = districtRepo.findAllByCity_Id(city_id);
+            return new ResponseEntity<>(districts, HttpStatus.OK);
+        } catch (Exception e) {
+        	System.out.println(e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -98,16 +109,7 @@ public class AddressSecondController {
         }
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<List<Address>> getAddresses(@PathVariable("id") Long
-    // user_id) {
-    // try {
-    // List<AddressS> addresses = address2Repo.findByUser_Id(user_id);
-    // return new ResponseEntity<>(addresses, HttpStatus.OK);
-    // } catch (Exception e) {
-    // return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    // }
-    // }
+
 
     @PostMapping(value = "/create", consumes = { "*/*" })
     public ResponseEntity<AddressSecond> createAddressSecond(@Valid @RequestBody AddressSecondRequest address2) {
@@ -121,7 +123,6 @@ public class AddressSecondController {
         }
     }
 
-    // tên cũ: createAddress chưa sửa trong ReactJs
     @PutMapping(value = "/{id}", consumes = { "*/*" })
     public ResponseEntity<AddressSecond> updateAddressSecond(
             @Valid @RequestBody AddressSecondRequest addressSecondRequest,
@@ -159,3 +160,15 @@ public class AddressSecondController {
         }
     }
 }
+
+
+//@GetMapping("/{id}")
+//public ResponseEntity<List<Address>> getAddresses(@PathVariable("id") Long
+//user_id) {
+//try {
+//List<AddressSecond> addresses = address2Repo.findByUser_Id(user_id);
+//return new ResponseEntity<>(addresses, HttpStatus.OK);
+//} catch (Exception e) {
+//return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//}
+//}
