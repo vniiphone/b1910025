@@ -43,90 +43,85 @@ import com.travel.b1910025.security.services.TourService;
 @RestController
 @RequestMapping("/api/tour")
 public class TourController {
-    @Autowired
-    TourService tourService;
-    @Autowired
-    TourRepository tourRp;
-    @Autowired
-    RestauRepository restauRp;
-    @Autowired
-    HotelRepository hoteRp;
-    @Autowired
-    FirmRepository firmRp;
-    @Autowired
-    PlaceRepository placeRp;
-    @Autowired
-    CategoryRepository cateRp;
+	@Autowired
+	TourService tourService;
+	@Autowired
+	TourRepository tourRp;
+	@Autowired
+	RestauRepository restauRp;
+	@Autowired
+	HotelRepository hoteRp;
+	@Autowired
+	FirmRepository firmRp;
+	@Autowired
+	PlaceRepository placeRp;
+	@Autowired
+	CategoryRepository cateRp;
 
-    
+	@GetMapping("")
+	public ResponseEntity<Page<Tour>> getAllTours(@RequestParam Optional<Integer> page,
+			@RequestParam Optional<String> sortBy) {
+		try {
+			Page<Tour> tours = tourService.getAllTours(page, sortBy);
+			return new ResponseEntity<>(tours, HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-    @GetMapping("")
-    public ResponseEntity<Page<Tour>> getAllTours(@RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> sortBy) {
-        try {
-            Page<Tour> tours = tourService.getAllTours(page, sortBy);
-            return new ResponseEntity<>(tours, HttpStatus.OK);
-        } catch (Exception e) {
-        	System.out.println(e);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<Tour> getTourById(@PathVariable("id") Long id) {
+		Tour tour = tourService.getASingleTour(id);
+		return new ResponseEntity<>(tour, HttpStatus.OK);
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Tour> getTourById(@PathVariable("id") Long id) {
-        Tour tour = tourService.getASingleTour(id);
-        return new ResponseEntity<>(tour, HttpStatus.OK);
-
-    }
-
-    @PostMapping(value = "/create", consumes = { "*/*" })
-    public ResponseEntity<Tour> createTour( 
-    		@RequestParam("name") String name,
-            @RequestParam("slot") int slot,
-            @RequestParam("price") int price,
-    		@RequestParam("beginTrip") Date beginTrip,
-    		@RequestParam("endTrip") Date endTrip,
-    		@RequestParam("description") String description,
-    		@RequestParam("imageUrl") String imageUrl,
-    		@RequestParam("imagePublicId") String imagePublicId,
-    		@RequestParam("category_id") Long category_id,
-    		@RequestParam("firm_id") Long firm_id,
-    		@RequestParam("place_id") Long place_id,
-    		@RequestParam("hotel_id") Long hotel_id,
-    		@RequestParam("restau_id") Long restau_id) {
-    	Hotel hotel = new Hotel(); 
-    	Firm firm  = new Firm();
-    	Restau restau = new Restau();
-    	Category category = new Category();
-    	Place place = new Place();
-    	try {
-    		hotel.setId(hotel_id);
-    		firm.setId(firm_id);
-    		restau.setId(restau_id);
-    		category.setId(category_id);
-    		place.setId(place_id);
-			Tour a = new Tour(name,slot,price, beginTrip, endTrip, description,imageUrl,imagePublicId,category,firm,place,hotel,restau);
+	}
+	// định dạng: yyyy/mm/dd: -->ex: 2023/02/24
+	@PostMapping(value = "/create", consumes = { "*/*" })
+	public ResponseEntity<Tour> createTour(@RequestParam("name") String name, @RequestParam("slot") int slot,
+			@RequestParam("price") int price, @RequestParam("beginTrip") Date beginTrip,
+			@RequestParam("endTrip") Date endTrip, @RequestParam("description") String description,
+			@RequestParam("imageUrl") String imageUrl, @RequestParam("imagePublicId") String imagePublicId,
+			@RequestParam("category_id") Long category_id, @RequestParam("firm_id") Long firm_id,
+			@RequestParam("place_id") Long place_id, @RequestParam("hotel_id") Long hotel_id,
+			@RequestParam("restau_id") Long restau_id) {
+		Hotel hotel = new Hotel();
+		Firm firm = new Firm();
+		Restau restau = new Restau();
+		Category category = new Category();
+		Place place = new Place();
+		
+//		String nameOfHotel = hoteRp.findById(hotel_id).get().getName().toString();
+//		hotel.setName(nameOfHotel);
+		try {
+			hotel.setId(hotel_id);
+			firm.setId(firm_id);
+			restau.setId(restau_id);
+			category.setId(category_id);
+			place.setId(place_id);
+			Tour a = new Tour(name, slot, price, beginTrip, endTrip, description, imageUrl, imagePublicId, category,
+					firm, place, hotel, restau);
 			return new ResponseEntity<>(tourRp.save(a), HttpStatus.CREATED);
 		} catch (Exception e) {
 			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 //    	return new ResponseEntity<>(tourService.createTour(Tour), HttpStatus.CREATED);
-    }
+	}
 
-    @PutMapping(value = "/{id}", consumes = { "*/*" })
-    public ResponseEntity<Optional<Tour>> updateTour(@PathVariable("id") Long id,
-            @RequestBody @Valid TourRequest tour) {
-        return new ResponseEntity<>(tourService.updateTour(id, tour), HttpStatus.CREATED);
-    }
+	@PutMapping(value = "/{id}", consumes = { "*/*" })
+	public ResponseEntity<Optional<Tour>> updateTour(@PathVariable("id") Long id,
+			@RequestBody @Valid TourRequest tour) {
+		return new ResponseEntity<>(tourService.updateTour(id, tour), HttpStatus.CREATED);
+	}
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<MessageResponse> deleteTour(@PathVariable("id") Long id) {
-        try {
-            tourService.deleteTour(id);
-            return new ResponseEntity<>(null, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<MessageResponse> deleteTour(@PathVariable("id") Long id) {
+		try {
+			tourService.deleteTour(id);
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

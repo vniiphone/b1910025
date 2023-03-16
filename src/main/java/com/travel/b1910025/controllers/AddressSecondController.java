@@ -45,130 +45,142 @@ import com.travel.b1910025.repository.RestauRepository;
 import com.travel.b1910025.repository.UserRepository;
 import com.travel.b1910025.repository.WardRepository;
 
+@CrossOrigin(origins = " http://localhost:3000")
 @RestController
-@CrossOrigin(origins = {"http://localhost:3001"," http://localhost:3000"})
 @RequestMapping("/api/addressSecond")
 public class AddressSecondController {
-    @Autowired
-    AddressSecondRepository address2Repo;
-    @Autowired
-    CityRepository cityRepo;
-    @Autowired
-    DistrictRepository districtRepo;
-    @Autowired
-    WardRepository wardRepo;
+	@Autowired
+	AddressSecondRepository address2Repo;
+	@Autowired
+	CityRepository cityRepo;
+	@Autowired
+	DistrictRepository districtRepo;
+	@Autowired
+	WardRepository wardRepo;
 
-    @GetMapping("/city")
-    public ResponseEntity<List<City>> getCities() {
-        try {
-            List<City> cities = cityRepo.findAll();
-            return new ResponseEntity<>(cities, HttpStatus.OK);
-        } catch (Exception e) {
-        	System.out.println(e);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+	@GetMapping("/city")
+	public ResponseEntity<List<City>> getCities() {
+		try {
+			List<City> cities = cityRepo.findAll();
+			return new ResponseEntity<>(cities, HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-    @GetMapping("/district")
-    public ResponseEntity<List<District>> getDistricts(@RequestParam Optional<Long> city_id) {
-        try {
-            List<District> districts;
-            if (city_id.isPresent()) {
-                districts = districtRepo.findAllByCity_Id(city_id.get());
-            } else
-                districts = districtRepo.findAll();
+	@GetMapping("/district")
+	public ResponseEntity<List<District>> getDistricts(@RequestParam Optional<Long> city_id) {
+		try {
+			List<District> districts;
+			if (city_id.isPresent()) {
+				districts = districtRepo.findAllByCity_Id(city_id.get());
+			} else
+				districts = districtRepo.findAll();
 
-            return new ResponseEntity<>(districts, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    @GetMapping("/districtsByCity")
-    public ResponseEntity<List<District>> getDistrictsByCity(@RequestParam Long city_id) {
-        try {
-            List<District> districts = districtRepo.findAllByCity_Id(city_id);
-            return new ResponseEntity<>(districts, HttpStatus.OK);
-        } catch (Exception e) {
-        	System.out.println(e);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+			return new ResponseEntity<>(districts, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-    @GetMapping("/ward")
-    public ResponseEntity<List<Ward>> getWards(@RequestParam Optional<Long> district_id) {
-        try {
-            List<Ward> wards;
-            if (district_id.isPresent()) {
-                wards = wardRepo.findAllByDistrict_Id(district_id.get());
-            } else
-                wards = wardRepo.findAll();
+	@GetMapping("/districtsByCity")
+	public ResponseEntity<List<District>> getDistrictsByCity(@RequestParam Long city_id) {
+		try {
+			List<District> districts = districtRepo.findAllByCity_Id(city_id);
+			return new ResponseEntity<>(districts, HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-            return new ResponseEntity<>(wards, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+	@GetMapping("/ward")
+	public ResponseEntity<List<Ward>> getWards() {
+		try {
+			List<Ward> wards;
+			wards = wardRepo.findAll();
 
+			return new ResponseEntity<>(wards, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
+	@GetMapping("/wardByDistrict")
+	public ResponseEntity<List<Ward>> getWardByDistrict(@RequestParam Optional<Long> district_id) {
+		try {
+			List<Ward> wards;
+			if (district_id.isPresent()) {
+				wards = wardRepo.findAllByDistrict_Id(district_id.get());
+			} else
+				wards = wardRepo.findAll();
 
-    @PostMapping(value = "/create", consumes = { "*/*" })
-    public ResponseEntity<AddressSecond> createAddressSecond(@Valid @RequestBody AddressSecondRequest address2) {
-        try {
-            Ward ward = wardRepo.findById(address2.getWard_id()).get();
+			return new ResponseEntity<>(wards, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-            AddressSecond a = new AddressSecond(address2.getAddressSe(), address2.getPhone(), ward);
-            return new ResponseEntity<>(address2Repo.save(a), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+	@PostMapping(value = "/create", consumes = { "*/*" })
+	public ResponseEntity<AddressSecond> createAddressSecond(@Valid @RequestBody AddressSecondRequest address2) {
+		try {
+			Ward ward = wardRepo.findById(address2.getWard_id()).get();
 
-    @PutMapping(value = "/{id}", consumes = { "*/*" })
-    public ResponseEntity<AddressSecond> updateAddressSecond(
-            @Valid @RequestBody AddressSecondRequest addressSecondRequest,
-            @PathVariable("id") Long id) {
-        try {
-            Optional<AddressSecond> a = address2Repo.findById(id);
+			AddressSecond a = new AddressSecond(address2.getAddressSe(), address2.getPhone(), ward);
+			return new ResponseEntity<>(address2Repo.save(a), HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-            if (a.isPresent()) {
-                Ward w = wardRepo.findById(addressSecondRequest.getWard_id()).get();
+	@PutMapping(value = "/{id}", consumes = { "*/*" })
+	public ResponseEntity<AddressSecond> updateAddressSecond(
+			@Valid @RequestBody AddressSecondRequest addressSecondRequest, @PathVariable("id") Long id) {
+		try {
+			Optional<AddressSecond> a = address2Repo.findById(id);
 
-                a.get().setWard(w);
-                a.get().setPhone(addressSecondRequest.getPhone());
-                a.get().setAddress2(addressSecondRequest.getAddressSe());
+			if (a.isPresent()) {
+				Ward w = wardRepo.findById(addressSecondRequest.getWard_id()).get();
 
-                return new ResponseEntity<>(address2Repo.save(a.get()), HttpStatus.OK);
+				a.get().setWard(w);
+				a.get().setPhone(addressSecondRequest.getPhone());
+				a.get().setAddress2(addressSecondRequest.getAddressSe());
 
-            } else {
-                throw new InvalidConfigurationPropertyValueException("address2Id", id, "Not found");
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+				return new ResponseEntity<>(address2Repo.save(a.get()), HttpStatus.OK);
 
-    @DeleteMapping(value = "/{id}", consumes = { "*/*" })
-    public ResponseEntity<String> deleteAddressSecond(@PathVariable("id") Long id) {
-        try {
-            if (address2Repo.findById(id).get().getId().equals(id)) {
-                address2Repo.deleteById(id);
-                return new ResponseEntity<>("Deleted", HttpStatus.OK);
-            } else
-                throw new InvalidConfigurationPropertyValueException("id", id, "Not found");
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+			} else {
+				throw new InvalidConfigurationPropertyValueException("address2Id", id, "Not found");
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@DeleteMapping(value = "/{id}", consumes = { "*/*" })
+	public ResponseEntity<String> deleteAddressSecond(@PathVariable("id") Long id) {
+		try {
+			if (address2Repo.findById(id).get().getId().equals(id)) {
+				address2Repo.deleteById(id);
+				return new ResponseEntity<>("Deleted", HttpStatus.OK);
+			} else
+				throw new InvalidConfigurationPropertyValueException("id", id, "Not found");
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@GetMapping("/{id}")
+	public ResponseEntity<AddressSecond> getAddress(@PathVariable("id") Long address2_id) {
+	    try {
+	        AddressSecond address = address2Repo.findById(address2_id).orElseThrow(null);
+	        return new ResponseEntity<>(address, HttpStatus.OK);
+	    } catch (Exception e) {
+	    	System.out.println(e);
+	        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+
+	
 }
 
-
-//@GetMapping("/{id}")
-//public ResponseEntity<List<Address>> getAddresses(@PathVariable("id") Long
-//user_id) {
-//try {
-//List<AddressSecond> addresses = address2Repo.findByUser_Id(user_id);
-//return new ResponseEntity<>(addresses, HttpStatus.OK);
-//} catch (Exception e) {
-//return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//}
-//}

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.travel.b1910025.security.services.CartItemService;
 
-@CrossOrigin(origins = "http://127.0.0.1:5173", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3033", maxAge = 3600)
 @RestController
 @RequestMapping("/api/cart")
 public class CartItemController {

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.travel.b1910025.payload.response.DashbroadResponse;
 import com.travel.b1910025.security.services.AdminService;
 
-@CrossOrigin(origins = {"http://localhost:3001"," http://localhost:3000"})
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {

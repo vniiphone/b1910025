@@ -1,5 +1,7 @@
 package com.travel.b1910025.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import
-org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.travel.b1910025.models.User;
 import com.travel.b1910025.security.jwt.AuthEntryPointJwt;
@@ -30,69 +32,63 @@ import com.travel.b1910025.security.services.UserDetailsServiceImpl;
 @EnableGlobalMethodSecurity(
 // securedEnabled = true,
 // jsr250Enabled = true,
-prePostEnabled = true)
+		prePostEnabled = true)
 public class WebSecurityConfig {
-@Autowired
-UserDetailsServiceImpl userDetailsService;
+	@Autowired
+	UserDetailsServiceImpl userDetailsService;
 
-@Autowired
-private AuthEntryPointJwt unauthorizedHandler;
+	@Autowired
+	private AuthEntryPointJwt unauthorizedHandler;
 
-@Bean
-public AuthTokenFilter authenticationJwtTokenFilter() {
-return new AuthTokenFilter();
-}
+	@Bean
+	public AuthTokenFilter authenticationJwtTokenFilter() {
+		return new AuthTokenFilter();
+	}
 
-@Bean
-public DaoAuthenticationProvider authenticationProvider() {
-DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-authProvider.setUserDetailsService(userDetailsService);
-authProvider.setPasswordEncoder(passwordEncoder());
+		authProvider.setUserDetailsService(userDetailsService);
+		authProvider.setPasswordEncoder(passwordEncoder());
 
-return authProvider;
-}
+		return authProvider;
+	}
 
-@Bean
-public AuthenticationManager
-authenticationManager(AuthenticationConfiguration authConfig) throws
-Exception {
-return authConfig.getAuthenticationManager();
-}
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+		return authConfig.getAuthenticationManager();
+	}
 
-@Bean
-public PasswordEncoder passwordEncoder() {
-return new BCryptPasswordEncoder();
-}
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-http.cors().and().csrf().disable()
-.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-.authorizeRequests().antMatchers("/api/auth/**").permitAll()
-.antMatchers("/api/tour/**").permitAll()
-.antMatchers("/api/address/**").permitAll()
-.antMatchers("/api/addressSecond/**").permitAll()
-.antMatchers("/api/hotel/**").permitAll()
-.antMatchers("/api/place/**").permitAll()
-.antMatchers("/api/restau/**").permitAll()
-.antMatchers("/api/firm/**").permitAll()
-.antMatchers("/api/nhanvien/**").permitAll()
-.antMatchers("/api/cart/**").permitAll()
-.antMatchers("/api/category/**").permitAll()
-.antMatchers("/api/search/**").permitAll()
-.antMatchers("/api/invoice/**").permitAll()
-.antMatchers("/api/payment/**").permitAll()
-.antMatchers("/api/admin/**").permitAll()
-.anyRequest().authenticated();
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.cors().configurationSource(request -> {
+		    CorsConfiguration corsConfig = new CorsConfiguration();
+			 corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+			    corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+			    corsConfig.setAllowedHeaders(Arrays.asList("*"));
+			    return corsConfig;
+		}).and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.antMatchers("/api/auth/**").permitAll().antMatchers("/api/tour/**").permitAll()
+				.antMatchers("/api/address/**").permitAll().antMatchers("/api/addressSecond/**").permitAll()
+				.antMatchers("/api/hotel/**").permitAll().antMatchers("/api/place/**").permitAll()
+				.antMatchers("/api/restau/**").permitAll().antMatchers("/api/firm/**").permitAll()
+				.antMatchers("/api/nhanvien/**").permitAll().antMatchers("/api/cart/**").permitAll()
+				.antMatchers("/api/category/**").permitAll().antMatchers("/api/search/**").permitAll()
+				.antMatchers("/api/invoice/**").permitAll().antMatchers("/api/payment/**").permitAll()
+				.antMatchers("/api/admin/**").permitAll().anyRequest().authenticated();
 
-http.authenticationProvider(authenticationProvider());
+		http.authenticationProvider(authenticationProvider());
 
-http.addFilterBefore(authenticationJwtTokenFilter(),
-UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-return http.build();
-}
+		return http.build();
+	}
 
 }

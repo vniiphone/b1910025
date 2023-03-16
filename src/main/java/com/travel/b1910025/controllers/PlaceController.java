@@ -26,7 +26,7 @@ import com.travel.b1910025.repository.PlaceRepository;
 import com.travel.b1910025.repository.AddressSecondRepository;
 import com.travel.b1910025.repository.TourRepository;
 
-@CrossOrigin(origins = {"http://localhost:3001"," http://localhost:3000"})
+@CrossOrigin(origins = " http://localhost:3000")
 @RestController
 @RequestMapping("/api/place")
 public class PlaceController {

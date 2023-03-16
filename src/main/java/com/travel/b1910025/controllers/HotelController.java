@@ -26,7 +26,7 @@ import com.travel.b1910025.repository.HotelRepository;
 import com.travel.b1910025.repository.AddressSecondRepository;
 import com.travel.b1910025.repository.TourRepository;
 
-@CrossOrigin(origins = {"http://localhost:3000"," http://localhost:3001"})
+@CrossOrigin(origins = " http://localhost:3000")
 @RestController
 @RequestMapping("/api/hotel")
 public class HotelController {
@@ -39,6 +39,7 @@ public class HotelController {
 	private AddressSecondRepository address2Repo;
 
 	// get all firm
+	@CrossOrigin(origins = " http://localhost:3000")
 	@GetMapping("")
 	public List<Hotel> getAlllHotel() {
 		return hotelRepository.findAll();
@@ -58,6 +59,7 @@ public class HotelController {
 	}
 
 	// get firm by id rest api
+	@CrossOrigin(origins = " http://localhost:3000")
 	@GetMapping("/{id}")
 	public ResponseEntity<Hotel> getEmployeeById(@PathVariable Long id) {
 		Hotel hotel = hotelRepository.findById(id)
@@ -66,7 +68,7 @@ public class HotelController {
 	}
 
 
-
+	@CrossOrigin(origins = " http://localhost:3000")
 	@PutMapping(value = "/{id}", consumes = { "*/*" })
 	public ResponseEntity<Hotel> updateHotel(@Valid @RequestBody HotelRequest hotel,
 			@PathVariable("id") Long id) {
@@ -92,6 +94,7 @@ public class HotelController {
 	}
 
 	// delete employee rest api
+	@CrossOrigin(origins = " http://localhost:3000")
 	@DeleteMapping(value = "/{id}", consumes = { "*/*" })
 	public ResponseEntity<String> deleteHotel(@PathVariable("id") Long id) {
 		boolean hasHotel = hotelRepository.existsById(id);

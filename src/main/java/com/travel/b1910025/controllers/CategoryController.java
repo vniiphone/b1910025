@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.travel.b1910025.payload.response.ResourceNotFoundException;
 import com.travel.b1910025.models.Category;
 
-@CrossOrigin(origins = {"http://localhost:3001"," http://localhost:3000"})
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController {
