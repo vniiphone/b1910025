@@ -86,7 +86,30 @@ public class AuthController {
           .badRequest()
           .body(new MessageResponse("Error: Email is already in use!"));
     }
-
+@PostMapping("/signupuser")
+	public ResponseEntity registerNewUser(@RequestParam("username") String username,
+			@RequestParam("email") String email, @RequestParam("password") String password) {
+	
+		 if (userRepository.existsByUsername(username)) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+		} else if (userRepository.existsByEmail(email)) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+		} else {
+			try {
+				// Create new user's account
+				User user = new User(username, email, encoder.encode(password), "user");
+				userRepository.save(user);
+				//return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
+				return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println(e);
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+	}
+    
+    
     // Create new user's account
     User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
         encoder.encode(signUpRequest.getPassword()), "user");
