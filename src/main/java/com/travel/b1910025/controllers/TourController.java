@@ -39,7 +39,7 @@ import com.travel.b1910025.repository.RestauRepository;
 import com.travel.b1910025.repository.TourRepository;
 import com.travel.b1910025.security.services.TourService;
 
-@CrossOrigin(origins = "http://127.0.0.1:5173", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping("/api/tour")
 public class TourController {
@@ -76,6 +76,7 @@ public class TourController {
 		return new ResponseEntity<>(tour, HttpStatus.OK);
 
 	}
+
 	// định dạng: yyyy/mm/dd: -->ex: 2023/02/24
 	@PostMapping(value = "/create", consumes = { "*/*" })
 	public ResponseEntity<Tour> createTour(@RequestParam("name") String name, @RequestParam("slot") int slot,
@@ -90,9 +91,9 @@ public class TourController {
 		Restau restau = new Restau();
 		Category category = new Category();
 		Place place = new Place();
-		
-//		String nameOfHotel = hoteRp.findById(hotel_id).get().getName().toString();
-//		hotel.setName(nameOfHotel);
+
+		// String nameOfHotel = hoteRp.findById(hotel_id).get().getName().toString();
+		// hotel.setName(nameOfHotel);
 		try {
 			hotel.setId(hotel_id);
 			firm.setId(firm_id);
@@ -106,7 +107,8 @@ public class TourController {
 			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-//    	return new ResponseEntity<>(tourService.createTour(Tour), HttpStatus.CREATED);
+		// return new ResponseEntity<>(tourService.createTour(Tour),
+		// HttpStatus.CREATED);
 	}
 
 	@PutMapping(value = "/{id}", consumes = { "*/*" })

@@ -46,7 +46,7 @@ import com.travel.b1910025.repository.WardRepository;
 import com.travel.b1910025.security.services.FirmService;
 import com.travel.b1910025.security.services.TourService;
 
-@CrossOrigin(origins = {"http://localhost:3001"," http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 @RequestMapping("/api/firm")
 public class FirmController {
